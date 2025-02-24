@@ -5,17 +5,10 @@ console.log("jeg er i formregionjson")
 const urlPostRegion = "http://localhost:8080/region"
 
 
-
-function fetchAnyUrl(any) {
-    return fetch(any).then(response => response.json())
-}
-
-
-
 function createRegion() {
     const region = {}
-    region.kode = "1234"
-    region.navn = "KEA"
+    region.kode = "9999"
+    region.navn = "KEAxx"
     region.href = "http.kea"
     return region
 }
