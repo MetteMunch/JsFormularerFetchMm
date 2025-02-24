@@ -4,3 +4,12 @@ console.log("Jeg er i formregion")
 
 const feltInpName = document.getElementById("inpName")
 
+
+document.addEventListener('DOMContentLoaded', createFormEventListener);
+let formRegion;
+
+function createFormEventListener() {
+    formRegion = document.getElementById("formRegion");
+    formRegion.addEventListener("submit", handleFormSubmit);
+}
+
