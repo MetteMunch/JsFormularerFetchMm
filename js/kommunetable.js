@@ -33,7 +33,6 @@ function createTableRow(kommune) {
     console.log("rowCount", rowCount)
     let row = tblKommuner.insertRow(rowCount) //Her indsættes
     //en ny række i tabellen på den næste ledige plads (efter indeks startende med 0)
-    console.log("Hvilken rækkenummer starter vi med? ",rowCount)
     console.log("Kommune", kommune)
 
     let cell = row.insertCell(cellCount++)//Her oprettes første
