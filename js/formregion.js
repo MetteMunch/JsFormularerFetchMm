@@ -1,3 +1,5 @@
+import {sendJsonRequest} from "./modulejson.js";
+
 console.log("Jeg er i formregion")
 
 //Her vil jeg gemme en region oprettet via formularen fra html
@@ -40,7 +42,7 @@ async function postFormDataAsJson(url, formData) {
     const plainFormData = Object.fromEntries(formData.entries()) //Konverterer FormData objektet til
     //et almindeligt JavaScript objekt
     console.log("Her er variablen plainFormData: ", plainFormData)
-    const response = await postObjectAsJson(url, plainFormData, "POST") //Sender JavaScript objektet
+    const response = await sendJsonRequest(url, plainFormData, "POST") //Sender JavaScript objektet
     //til funktionen postObjectAsJson for at sende det som Json
     if (!response.ok) {
         const errorMessage = response.statusText;
@@ -52,28 +54,4 @@ async function postFormDataAsJson(url, formData) {
 
 }
 
-async function postObjectAsJson(url, object, httpVerbum) {
-
-    const objectAsJsonString = JSON.stringify(object); //stringify konverterer vores objekt til en JSON-streng
-    console.log("omdanner object til JSON streng", objectAsJsonString);
-    const fetchOptions = { //Her definerer vi et objekt "fetchOptions" som beskriver hvordan vi vil sende data
-        method: httpVerbum,
-        headers: {
-            "Content-Type": "application/json", //Vi fortæller serveren, at vi sender JSON
-        },
-        body: objectAsJsonString, //Det er vores objekt konverteret til en JSON-streng som vi sender som data (i body)
-    };
-
-    const response = await fetch(url, fetchOptions); //HTTP-request sendes med fetch til den angivne url.
-    //fetch returnerer et promise til et starte med, men await gør at vi venter på korrekt svar (response)
-
-    if (!response.ok) {
-        const errorMessage = response.statusText;
-        console.error("Dette er fejl i postObjectAsData", errorMessage); //Hvis serveren returnerer med en fejl, henter vi denne fejlbesked og udskriver den i konsollen
-        console.log("Dette er fejl i postObjectAsData", errorMessage); //Hvis serveren returnerer med en fejl, henter vi denne fejlbesked og udskriver den i konsollen
-    }
-    return response;
-
-
-}
 
