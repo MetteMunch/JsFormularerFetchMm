@@ -63,10 +63,11 @@ function createTableRow(kommune) {
 
     //Add dropdown regioner
     cell = row.insertCell(cellCount++)
-    const dropDown = document.createElement('select')
-    regMap.forEach(reg => {
-        const element = document.createElement('option')
-        element.textContent = reg.navn
+    const dropDown = document.createElement('select')//Her laver vi html elementet select, som
+    //er en drop down
+    regMap.forEach(reg => { //For hver region i vores Map...
+        const element = document.createElement('option') //opretter vi en valgmulighed i dd
+        element.textContent = reg.navn //teksten der skal vises er navn
         element.value = reg.kode
 
         if(reg.kode === kommune.region.kode) { //her får vi den til at starte visning
