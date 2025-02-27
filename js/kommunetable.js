@@ -3,9 +3,12 @@ import {fetchAnyUrl, sendJsonRequest} from "./modulejson.js";
 console.log("Jeg er i kommunetable js")
 
 const urlKommuner = "http://localhost:8080/kommuner"
+const urlRegioner = "http://localhost:8080/regioner"
 const pbHentKommuner = document.getElementById("pbGetKommuner")
 const tblKommuner = document.getElementById("tblKommuner")
 let kommuner = []
+let regioner = []
+let regMap = new Map()
 
 //Listeners
 pbHentKommuner.addEventListener("click",actionGetKommuner)
@@ -15,6 +18,7 @@ pbHentKommuner.addEventListener("click",actionGetKommuner)
 
 function actionGetKommuner() {
     fetchKommuner()
+    fetchRegioner()
 }
 
 async function fetchKommuner() {
@@ -23,6 +27,17 @@ async function fetchKommuner() {
         kommuner.forEach(createTableRow)
     } else {
         alert("Fejl ved kald til backend url: "+ urlKommuner +"\n"+
+            "Vil du vide mere, så kig i consollen")
+    }
+}
+
+async function fetchRegioner() {
+    console.log("er jeg kommet ind i fetchRegioner?")
+    regioner = await fetchAnyUrl(urlRegioner)
+    if(regioner) {
+        regioner.forEach(region => regMap.set(region.navn, region))
+    } else {
+        alert("fejl ved kald til backend url: " +urlRegioner+"\n"+
             "Vil du vide mere, så kig i consollen")
     }
 }
@@ -46,11 +61,21 @@ function createTableRow(kommune) {
     cell = row.insertCell(cellCount++)
     cell.innerHTML = kommune.href
 
+    //Add dropdown regioner
     cell = row.insertCell(cellCount++)
-    cell.innerHTML = kommune.region.kode
+    const dropDown = document.createElement('select')
+    regMap.forEach(reg => {
+        const element = document.createElement('option')
+        element.textContent = reg.navn
+        element.value = reg.kode
 
-    cell = row.insertCell(cellCount++)
-    cell.innerHTML = kommune.region.navn
+        if(reg.kode === kommune.region.kode) { //her får vi den til at starte visning
+            //med regionen som den er tilknyttet med oprindeligt
+            element.selected = true
+        }
+        dropDown.append(element)
+    })
+    cell.appendChild(dropDown)
 
     row.Id = kommune.kode
     console.log("row id ",row.Id)

@@ -1,6 +1,6 @@
 
 
-//Denne bruuges til GET requests
+//Denne bruges til GET requests
 function fetchAnyUrl(url) {
     return fetch(url).then(response => response.json()).catch(error =>
     console.error("Handled error: ", error))
