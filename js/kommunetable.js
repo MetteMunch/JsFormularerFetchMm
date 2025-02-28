@@ -56,7 +56,10 @@ function createTableRow(kommune) {
     cell.innerHTML = kommune.kode //Her tildeles cellen en værdi
 
     cell = row.insertCell(cellCount++)
-    cell.innerHTML = kommune.navn
+    let inputNavn = document.createElement("input")
+    inputNavn.type = "text"
+    inputNavn.value = kommune.navn
+    cell.appendChild(inputNavn)
 
     cell = row.insertCell(cellCount++)
     cell.innerHTML = kommune.href
@@ -98,6 +101,22 @@ function createTableRow(kommune) {
 
     }
     console.log("row", row)
+
+    cell = row.insertCell(cellCount++) //her indsætter vi gem knap
+    const pbSave = document.createElement("input")
+    pbSave.type = "button"
+    pbSave.value = "Gem ændringer"
+    pbSave.onclick = async function() {
+        if(confirm("Er du sikker på at du vil opdatere: " +kommune.navn+"?")) {
+            let updatedKommune = {
+                ...kommune, //denne betyder at oprindelig kommune objekt kopieres
+                navn: inputNavn.value //og her er den som ændres
+            }
+            await updateKommune(updatedKommune)
+        }
+    }
+    cell.appendChild(pbSave)
+
 }
 
 async function deleteKommune(kommune) {
@@ -108,6 +127,20 @@ async function deleteKommune(kommune) {
         return true
     } else {
         alert("Fejl ved sletning af kommunen.");
+        return false;
+    }
+
+}
+
+async function updateKommune(kommune) {
+    console.log("er jeg i updateKommune funktion: ", kommune)
+    const updateUrl = "http://localhost:8080/kommuner/" +kommune.kode
+    const response = await sendJsonRequest(updateUrl,kommune,"PUT")
+    if(response.ok) {
+        console.log("Kommune er opdateret: ",kommune.navn)
+        return true
+    } else {
+        alert("Fejl ved opdatering af kommunen.");
         return false;
     }
 
